@@ -10,9 +10,8 @@
       <module name="axelor-demo.modules.axelor-contact.test" target="1.8" />
       <module name="axelor-demo.modules.axelor-ticket.main" target="1.8" />
       <module name="axelor-demo.modules.axelor-ticket.test" target="1.8" />
-      <module name="axelor-demo.modules.kline-communication.main" target="1.8" />
-      <module name="axelor-demo.modules.kline-communication.test" target="1.8" />
-      <module name="axelor-demo.test" target="1.8" />
+      <module name="axelor-demo.modules.kline-ticket.main" target="1.8" />
+      <module name="axelor-demo.modules.kline-ticket.test" target="1.8" />
       <module name="demo2.main" target="1.8" />
       <module name="demo2.test" target="1.8" />
     </bytecodeTargetLevel>

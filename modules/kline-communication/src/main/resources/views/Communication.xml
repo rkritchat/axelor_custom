@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  http://axelor.com/xml/ns/object-views/object-views_5.2.xsd">
+
+    <form name="communication-form" title="Communication" model="com.kline.communication.db.Communication" width="90%">
+        <panel-tabs name="mainPanelTab" colSpan="12">
+            <!--  SMS stuff-->
+            <panel name="smsPanel" title="SMS" >
+                <panel colSpan="8">
+                    <button name="createTemplateBtn" title="Create SMS Template" colSpan="5" onClick="com.kline.communication.SmsController:template"/>
+                    <field name="klineSmsTemplate" colSpan="12" placeholder="templateId" showTitle="false" onChange="com.kline.communication.SmsController:getSmsTemplateDetail"/>
+                    <field name="smsContent" colSpan="12" widget="text" height="15" showTitle="false" placeholder="Text message..."/> <!--widget="text" height="10"-->
+                </panel>
+                <panel colSpan="4">
+                    <field name="smsTo" title="TO:" colSpan="12"/>
+                    <button name="cancelBtn" title="Cancel" icon="fa-times-circle" css="btn-danger" colSpan="6" onClick="com.kline.communication.SmsController:clear"/>
+                    <button name="sendBtn" title="Send" colSpan="6" onClick="com.kline.communication.SmsController:sendSms"/>
+                </panel>
+            </panel>
+
+            <!--    Email stuff-->
+            <panel name="emailPanel" title="Email" onTabSelect="com.kline.communication.EmailController:onLoad">
+                <field name="klineEmailTemplate" colSpan="5" title="Template Id" onChange="com.kline.communication.EmailController:getTemplateDetail"/>
+                <button name="createNewEmailTemplate" colSpan="7" width="35%" title="Create Email template" onClick="com.kline.communication.EmailController:template"/>
+                <panel colSpan="5" css="label-small">
+                    <field name="emailFrom" colSpan="12" title="FROM" readonly="true"/>
+                    <field name="emailTo" colSpan="12"  title="TO"/>
+                    <field name="emailCC" colSpan="12" title="CC"/>
+                    <field name="emailBCC" colSpan="12" title="BCC"/>
+                    <field name="emailSubject" colSpan="12" title="SUBJECT"/>
+                </panel>
+                <panel colSpan="7">
+                    <field name="enableAttachment" colSpan="12" widget="boolean-switch" width="35%"/>
+                    <panel-related name="attachment" showIf="enableAttachment" field="klineEmailAttachment" title="" colSpan="12" editable="true"
+                                   grid-view="communication-email-attachment-grid"/>
+                </panel>
+                <field name="emailContent" colSpan="12" showTitle="false" widget="html" height="300"/>
+                <panel title="actionBtn" name="actionBtn"  showTitle="false" colSpan="6">
+                    <button name="emailSendBtn" title="Send email" icon="fa-envelope" colSpan="6" onClick="com.kline.communication.EmailController:send"/>
+                    <button name="emailClearBtn" title="Cancel" icon="fa-times-circle" css="btn-danger" colSpan="6" onClick="com.kline.communication.EmailController:clear"/>
+                </panel>
+            </panel>
+
+            <panel name="qaPanel" title="OA">
+                <field name="ignoreInAccountingOk" showIf="ignoreInAccountingOk" readonly="true"/>
+                <field name="ignoreInDebtRecoveryOk"/>
+                <field name="rejectOk" showIf="rejectOk" readonly="true"/>
+            </panel>
+
+            <panel name="aoaPanel" title="AOA">
+                <field name="ignoreInAccountingOk" showIf="ignoreInAccountingOk" readonly="true"/>
+                <field name="ignoreInDebtRecoveryOk"/>
+                <field name="rejectOk" showIf="rejectOk" readonly="true"/>
+            </panel>
+        </panel-tabs>
+    </form>
+</object-views>

@@ -1,0 +1,18 @@
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
+  http://axelor.com/xml/ns/domain-models/domain-models_5.0.xsd">
+
+    <!--    this datasource for showing in form/grid only-->
+
+    <module name="communication" package="com.kline.communication.db"/>
+
+    <entity name="Communication">
+        <many-to-one name="klineSmsTemplate" ref="KlineSmsTemplate" title="content" />
+        <one-to-many name="klineEmailAttachment" ref="KlineEmailAttachment"/>
+        <boolean name="enableAttachment" default="false" title="Attachment"/>
+        <boolean name="enableEmailTemplate" default="false" title="Email Template"/>
+        <many-to-one name="klineEmailTemplate" ref="KlineEmailTemplate" title="Body" />
+    </entity>
+
+</domain-models>

@@ -1,0 +1,19 @@
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
+  http://axelor.com/xml/ns/domain-models/domain-models_5.0.xsd">
+
+    <module name="communication" package="com.kline.communication.db"/>
+    <entity name="KlineEmailTransaction">
+        <datetime name="dateTime" />
+        <string name="emailFrom" />
+        <string name="emailTo" />
+        <string name="emailCc" />
+        <string name="emailBcc" />
+        <string name="emailSubject" />
+        <string name="emailBody" max="20000"/>
+        <one-to-many name="klineEmailAttachment" ref="KlineEmailAttachment"/>
+        <string name="owner" />
+        <string name="status" />
+    </entity>
+</domain-models>

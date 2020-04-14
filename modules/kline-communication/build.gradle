@@ -1,0 +1,10 @@
+apply plugin: 'com.axelor.app-module'
+
+axelor {
+   title = "Kline :: Communication"
+}
+
+dependencies{
+   compile group: 'javax.mail', name: 'mail', version: '1.4.7'
+   compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
+}

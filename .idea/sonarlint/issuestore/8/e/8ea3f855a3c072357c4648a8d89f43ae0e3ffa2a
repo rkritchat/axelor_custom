@@ -1,0 +1,5 @@
+
+U	java:S106["9Replace this use of System.out or System.err by a logger.(û‹•¯8ô–Ô½—.
+U	java:S106?"9Replace this use of System.out or System.err by a logger.(Æô»°8¯Îô¼—.
+~
+java:S1128"\Remove this unused import 'com.kline.communication.db.repo.KlineEmailTransactionRepository'.(İ³ñùÿÿÿÿ8±Ù®¿—.

@@ -37,7 +37,7 @@ allprojects {
 }
 
 dependencies {
-    compile project(':modules:kline-ticket')
+    compile project(':modules:kline-communication')
     compile project(':modules:axelor-message')
     compile project(':modules:axelor-tool')
     compile project(':modules:axelor-exception')

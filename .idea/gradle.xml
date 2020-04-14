@@ -14,7 +14,7 @@
             <option value="$PROJECT_DIR$/modules/axelor-exception" />
             <option value="$PROJECT_DIR$/modules/axelor-message" />
             <option value="$PROJECT_DIR$/modules/axelor-tool" />
-            <option value="$PROJECT_DIR$/modules/kline-ticket" />
+            <option value="$PROJECT_DIR$/modules/kline-communication" />
           </set>
         </option>
         <option name="useAutoImport" value="true" />

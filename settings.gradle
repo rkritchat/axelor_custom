@@ -1,7 +1,7 @@
 rootProject.name = 'axelor-demo'
 
 // Include modules
-include "modules:kline-ticket"
+include "modules:kline-communication"
 include "modules:axelor-message"
 include "modules:axelor-tool"
 include "modules:axelor-exception"
