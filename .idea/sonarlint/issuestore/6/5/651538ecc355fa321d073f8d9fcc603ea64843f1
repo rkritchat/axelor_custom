@@ -1,0 +1,16 @@
+
+]	java:S125="<This block of commented-out lines of code should be removed.(ÒĞ¯êúÿÿÿÿ8÷üÙ‘—.
+\
+java:S1854i"?Remove this useless assignment to local variable "emailTranId".(¿£…¢8‰¶Ş”—.
+K
+java:S1172J".Remove this unused method parameter "request".(Öà¡Õ8Óİã™–.
+P
+java:S1172!".Remove this unused method parameter "request".(ÚÜ±Óûÿÿÿÿ8ìô§õ•.
+U	java:S1064"9Replace this use of System.out or System.err by a logger.(¼»úœ8Ñ¯ª’—.
+Z	java:S106D"9Replace this use of System.out or System.err by a logger.(ÔöÌ…ıÿÿÿÿ8´ê‚ñ•.
+M
+java:S1481i"0Remove this unused "emailTranId" local variable.(¿£…¢8‰¶Ş”—.
+P
+java:S1172U".Remove this unused method parameter "request".(¬ÈÖúÿÿÿÿ8…ÑË–.
+U	java:S1062"9Replace this use of System.out or System.err by a logger.(°ò¿ç8¦¯âó•.
+X	java:S125j"<This block of commented-out lines of code should be removed.(‹àŠ¤8‰¶Ş”—.

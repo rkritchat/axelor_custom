@@ -1,0 +1,14 @@
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
+  http://axelor.com/xml/ns/domain-models/domain-models_5.0.xsd">
+
+    <module name="communication" package="com.kline.communication.db"/>
+    <entity name="KlineSmsTransaction">
+        <datetime name="dateTime" />
+        <string name="message" />
+        <string name="owner" />
+        <string name="status" />
+        <string name="smsTo" />
+    </entity>
+</domain-models>

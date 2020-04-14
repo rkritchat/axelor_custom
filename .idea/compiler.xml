@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="axelor-demo.modules.axelor-admin.main" target="1.8" />
+      <module name="axelor-demo.modules.axelor-admin.test" target="1.8" />
+      <module name="axelor-demo.modules.axelor-base.main" target="1.8" />
+      <module name="axelor-demo.modules.axelor-base.test" target="1.8" />
+      <module name="axelor-demo.modules.axelor-contact.main" target="1.8" />
+      <module name="axelor-demo.modules.axelor-contact.test" target="1.8" />
+      <module name="axelor-demo.modules.axelor-ticket.main" target="1.8" />
+      <module name="axelor-demo.modules.axelor-ticket.test" target="1.8" />
+      <module name="axelor-demo.modules.kline-communication.main" target="1.8" />
+      <module name="axelor-demo.modules.kline-communication.test" target="1.8" />
+      <module name="axelor-demo.test" target="1.8" />
+      <module name="demo2.main" target="1.8" />
+      <module name="demo2.test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

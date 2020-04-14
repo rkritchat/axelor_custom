@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.2.xsd">
+
+    <grid name="communication-kline-transaction-grid" title="Email Attachment" model="com.kline.communication.db.KlineTransaction" editable="false">
+        <field name="id" />
+        <field name="type" />
+        <field name="tranDate" title="Transaction Date"/>
+        <field name="tranTime" title="Transaction Time"/>
+        <field name="email" />
+        <field name="mobileNo" tile="Mobile No."/>
+        <field name="emailTranId" title="Email Trans Id" />
+        <field name="smsTranId" title="Sms Trans Id"/>
+        <field name="status" title="Status" />
+        <field name="owner" title="Owner"/>
+    </grid>
+
+    <form name="communication-kline-transaction-form" title="Email Detail" model="com.kline.communication.db.KlineTransaction" onLoad="com.kline.communication.EmailController:showEmailDetail">
+        <panel name="mainPanel">
+            <field name="tranDate" title="Transaction Date"/>
+            <field name="tranTime" title="Transaction Time"/>
+            <field name="status" title="Status" />
+            <field name="statusDesc" title="Status" showIf="status!==Success"/>
+            <field name="owner" title="Owner"/>
+            <field name="type" title="Type"/>
+        </panel>
+
+        <panel name="emailPanel" showIf="type==='email'">
+            <panel colSpan="5" css="label-small">
+                <field name="emailFrom" colSpan="12" title="FROM" canEdit="false"/>
+                <field name="emailTo" colSpan="12"  title="TO" />
+                <field name="emailCc" colSpan="12" title="CC" />
+                <field name="emailBcc" colSpan="12" title="BCC"/>
+                <field name="emailSubject" colSpan="12" title="SUBJECT" readonly="true"/>
+            </panel>
+            <field name="emailBody" colSpan="12" showTitle="false" widget="html" height="300" readonly="true"/>
+        </panel>
+
+        <panel name="smsPanel" showIf="type==='sms'">
+            <field name="smsTo" colSpan="12" title="TO" canEdit="false" width="50%"/>
+            <field name="smsMessage" colSpan="12"  title="Message" canEdit="false" width="50%"/>
+        </panel>
+    </form>
+
+</object-views>

@@ -1,0 +1,16 @@
+apply plugin: "com.axelor.app-module"
+
+apply from: "../version.gradle"
+
+apply {
+	version = "5.3.1-SNAPSHOT"
+}
+
+axelor {
+	title "Axelor Message"
+	description "Axelor Message Module"
+}
+
+dependencies {
+	compile project(":modules:axelor-tool")
+}

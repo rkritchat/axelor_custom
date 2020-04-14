@@ -1,0 +1,12 @@
+
+X	java:S107“"=Method has 18 parameters, which is greater than 7 authorized.(şƒÃ¬ıÿÿÿÿ
+n
+java:S3776ƒ"RRefactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.(¹Àæˆÿÿÿÿÿ
+_
+java:S4738°"CUse "String.join" or "java.util.stream.Collectors.joining" instead.(óÍÕğüÿÿÿÿ
+Y
+java:S4738³"CUse "String.join" or "java.util.stream.Collectors.joining" instead.(¿ãé 
+Z
+java:S4738¶"CUse "String.join" or "java.util.stream.Collectors.joining" instead.(å”æ
+_
+java:S4738¹"CUse "String.join" or "java.util.stream.Collectors.joining" instead.(€ç«Òÿÿÿÿÿ

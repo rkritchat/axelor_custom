@@ -1,0 +1,19 @@
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
+  http://axelor.com/xml/ns/domain-models/domain-models_5.0.xsd">
+
+    <module name="communication" package="com.kline.communication.db"/>
+    <entity name="KlineTransaction">
+        <string name="type" />
+        <string name="tranDate" />
+        <string name="tranTime" />
+        <string name="email" default=" - "/>
+        <string name="mobileNo" default=" - "/>
+        <string name="emailTranId" default=" - "/>
+        <string name="smsTranId" default=" - "/>
+        <string name="status" />
+        <string name="statusDesc"/>
+        <string name="owner" />
+    </entity>
+</domain-models>

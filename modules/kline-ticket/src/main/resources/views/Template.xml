@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.2.xsd">
+
+    <grid name="communication-template-grid" title="Sms Template" model="com.kline.communication.db.KlineSmsTemplate">
+        <field name="name" title="Category"/>
+        <field name="content" title="Content"/>
+    </grid>
+
+    <form name="communication-template-form" title="Sms Template" model="com.kline.communication.db.KlineSmsTemplate">
+        <field name="name" title="Category" colSpan="12" width="60%"/>
+        <field name="content" title="Content" colSpan="12" width="60%" widget="text" height="15"/>
+    </form>
+
+    <grid name="communication-email-template-grid" title="Email Template" model="com.kline.communication.db.KlineEmailTemplate">
+        <field name="body" title="Body"/>
+        <field name="subject" title="Subject"/>
+        <field name="toCC" title="CC"/>
+        <field name="toBCC" title="BCC"/>
+    </grid>
+
+    <form name="communication-email-template-form" title="Email Template" model="com.kline.communication.db.KlineEmailTemplate">
+        <field name="subject" title="Subject :" colSpan="12" width="40%"/>
+        <field name="toCC" title="CC :" colSpan="12" width="40%"/>
+        <field name="toBCC" title="BCC :" colSpan="12" width="40%"/>
+        <field name="body" title="Body :" colSpan="12" height="380" widget="html"/>
+    </form>
+
+    <grid name="communication-email-attachment-grid" title="Email Attachment" model="com.kline.communication.db.KlineEmailAttachment">
+        <field name="metaFile" title="Attachment"/>
+        <field name="metaFile" title="Attachment"/>
+    </grid>
+
+    <form name="communication-email-attachment-form" title="Email Attachment" model="com.kline.communication.db.KlineEmailAttachment">
+        <field name="metaFile" widget="binary-link" title="Attachment" showTitle="false"/>
+    </form>
+
+
+</object-views>
