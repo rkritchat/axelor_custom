@@ -49,11 +49,10 @@ public class EmailController {
             EmailRequest req = emailService.validateRequest(request);
             System.out.println(req);
             transactionModel = emailService.initTransaction(req);
-            System.out.println("start business---");
             emailService.initEmailTo(req, msg);
             emailService.initEmailSubject(req, msg);
             emailService.initEmailContent(req, multipart);
-            emailService.initEmailAttachment(req, multipart);
+            emailService.initEmailAttachment(req, multipart, request);
             msg.setContent(multipart);
 
             // sends the e-mail

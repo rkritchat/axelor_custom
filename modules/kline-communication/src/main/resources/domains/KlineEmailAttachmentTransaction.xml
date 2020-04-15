@@ -2,13 +2,11 @@
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
   http://axelor.com/xml/ns/domain-models/domain-models_5.0.xsd">
-
+    <!--
+        for create view template only
+    -->
     <module name="communication" package="com.kline.communication.db"/>
-    <entity name="KlineEmailTemplate">
-        <string name="name" required="true"/>
-        <string name="body" required="true" max="50000"/>
-        <string name="subject" required="true"/>
-        <string name="toCC" />
-        <string name="toBCC" />
+    <entity name="KlineEmailAttachmentTransaction">
+        <one-to-one name="metaFile" ref="com.axelor.meta.db.MetaFile" title="File" />
     </entity>
 </domain-models>

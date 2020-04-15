@@ -1,10 +1,10 @@
 
-
-java:S1128"€Remove this unused import 'com.kline.communication.constant.CommunicationConstant.ERROR.EXCEPTION_OCCURRED_WHILE_SENDING_EMAIL'.(àÌÊé8ì¯›¿—.
+Z	java:S106%"9Replace this use of System.out or System.err by a logger.(ÔöÌ…ıÿÿÿÿ8¤®«½—.
+Z	java:S106"9Replace this use of System.out or System.err by a logger.(„ÇˆÎøÿÿÿÿ8ÈÌß¿—.
 K
 java:S1172+".Remove this unused method parameter "request".(Öà¡Õ8•Ìª½—.
-Z	java:S106%"9Replace this use of System.out or System.err by a logger.(ÔöÌ…ıÿÿÿÿ8¤®«½—.
-Z	java:S106<"9Replace this use of System.out or System.err by a logger.(¦ÿ¥şÿÿÿÿ8´¡É¿—.
-Z	java:S106"9Replace this use of System.out or System.err by a logger.(„ÇˆÎøÿÿÿÿ8ÈÌß¿—.
+
+java:S1128"€Remove this unused import 'com.kline.communication.constant.CommunicationConstant.ERROR.EXCEPTION_OCCURRED_WHILE_SENDING_EMAIL'.(àÌÊé8ì¯›¿—.
 P
 java:S11721".Remove this unused method parameter "request".(¬ÈÖúÿÿÿÿ8•Ìª½—.
+Z	java:S106<"9Replace this use of System.out or System.err by a logger.(¦ÿ¥şÿÿÿÿ8´¡É¿—.

@@ -13,6 +13,8 @@ public class CommunicationConstant {
     public static final String STATUS_PENDING = "Pending";
     public static final String STATUS_FAILED = "Fail";
     public static final String STATUS_SUCCESS = "Success";
+    public static final String SMS_SUCCESS_RESPONSE = "0";
+    public static final String EMAIL_PATTERN = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}.[a-z]{2,}$";
 
 
     public enum ERROR {
@@ -26,6 +28,11 @@ public class CommunicationConstant {
         PLEASE_SET_EMAIL_ADDRESS_IN_YOUR_PROFILE("Please set email address in your profile."),
         SMS_CONTENT_IS_REQUIRED("Sms Content is required."),
         SMS_MOBILE_NO_IS_REQUIRED("Mobile Number is required."),
+        INVALID_MOBILE_NO("Invalid mobile number."),
+        INVALID_EMAIL_TO("Email To is invalid."),
+        INVALID_EMAIL_CC("Email CC is invalid."),
+        INVALID_EMAIL_BCC("Email BCC is invalid."),
+
 
         ;
         private String message;

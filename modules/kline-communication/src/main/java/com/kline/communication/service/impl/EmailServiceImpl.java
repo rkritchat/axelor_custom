@@ -11,6 +11,7 @@ import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.google.inject.persist.Transactional;
 import com.kline.communication.db.KlineEmailAttachment;
+import com.kline.communication.db.KlineEmailAttachmentTransaction;
 import com.kline.communication.db.KlineEmailTransaction;
 import com.kline.communication.db.KlineTransaction;
 import com.kline.communication.db.repo.KlineEmailTransactionRepository;
@@ -31,11 +32,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Properties;
+import java.util.*;
+import java.util.regex.Pattern;
 
-import static com.kline.communication.constant.CommunicationConstant.ERROR.*;
 import static com.kline.communication.constant.CommunicationConstant.*;
+import static com.kline.communication.constant.CommunicationConstant.ERROR.*;
 import static javax.ws.rs.core.MediaType.TEXT_HTML;
 
 public class EmailServiceImpl implements EmailService {
@@ -52,8 +53,14 @@ public class EmailServiceImpl implements EmailService {
         if(StringUtils.isEmpty(req.getContent())){
             throw new KLineException(EMAIL_CONTENT_IS_REQUIRED);
         }
-        if(req.getContent().contains(TAG_IMAGE)){
-            throw new KLineException(EMAIL_BODY_IS_INVALID);
+        if(!Pattern.matches(EMAIL_PATTERN, req.getTo())){
+            throw new KLineException(INVALID_EMAIL_TO);
+        }
+        if(!StringUtils.isEmpty(req.getToCC()) && !Pattern.matches(EMAIL_PATTERN, req.getToCC())){
+            throw new KLineException(INVALID_EMAIL_CC);
+        }
+        if(!StringUtils.isEmpty(req.getToBCC()) && !Pattern.matches(EMAIL_PATTERN, req.getToBCC())){
+            throw new KLineException(INVALID_EMAIL_BCC);
         }
         return req;
     }
@@ -99,14 +106,39 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void initEmailAttachment(EmailRequest req, Multipart multipart) throws IOException, MessagingException {
+    public void initEmailAttachment(EmailRequest req, Multipart multipart, ActionRequest request) throws IOException, MessagingException {
         if(!CollectionUtils.isEmpty(req.getAttachments()) && req.isAttachment()){
             req.setContainAttachment(true);
-            for (KlineEmailAttachment e : req.getAttachments()) {
+            //The framework cannot save meta, then go this way to sending email with attachment
+            List<KlineEmailAttachment> reqAttach = (List<KlineEmailAttachment>) request.getContext().get("klineEmailAttachment");
+            for (KlineEmailAttachment e : reqAttach) {
+                System.out.println(MetaFiles.getPath(e.getMetaFile()).toString());
                 MimeBodyPart attachPart = new MimeBodyPart();
                 attachPart.attachFile(MetaFiles.getPath(e.getMetaFile()).toString());
                 multipart.addBodyPart(attachPart);
             }
+        }
+    }
+
+    private  List<KlineEmailAttachment> initMetaFileId(EmailRequest req){
+        if(!CollectionUtils.isEmpty(req.getAttachments()) && req.isAttachment()) {
+            List<KlineEmailAttachment> attachments = new ArrayList<>();
+            for (KlineEmailAttachment e : req.getAttachments()) {
+                saveAttachmentTransaction(e.getMetaFile(), attachments);
+            }
+            return attachments;
+        }
+        return Collections.emptyList();
+    }
+
+    @Transactional
+    public void saveAttachmentTransaction(MetaFile metaFile, List<KlineEmailAttachment> attachments){
+        try {
+            KlineEmailAttachment mock = new KlineEmailAttachment();
+            mock.setMetaFileId(metaFile.getId());
+            attachments.add(mock);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -173,12 +205,29 @@ public class EmailServiceImpl implements EmailService {
         String emailTranId = com.kline.communication.utils.StringUtils.toString(request.getContext().get("emailTranId"));
         KlineEmailTransactionRepository emailTransactionRepository = Beans.get(KlineEmailTransactionRepository.class);
         KlineEmailTransaction emailTransaction = emailTransactionRepository.find(Long.parseLong(emailTranId));
+
         response.setValue("emailFrom", defaultIfNull(emailTransaction.getEmailFrom()));
         response.setValue("emailTo", defaultIfNull(emailTransaction.getEmailTo()));
         response.setValue("emailCc", defaultIfNull(emailTransaction.getEmailCc()));
         response.setValue("emailBcc", defaultIfNull(emailTransaction.getEmailBcc()));
         response.setValue("emailSubject", defaultIfNull(emailTransaction.getEmailSubject()));
         response.setValue("emailBody", defaultIfNull(emailTransaction.getEmailBody()));
+        response.setValue("emailAttachmentTransaction", initMetaFile(emailTransaction));
+    }
+
+    @Transactional
+    public List<KlineEmailAttachmentTransaction> initMetaFile(KlineEmailTransaction emailTransaction){
+        if (!CollectionUtils.isEmpty(emailTransaction.getKlineEmailAttachment())) {
+            List<KlineEmailAttachmentTransaction> metaFiles = new ArrayList<>();
+            for (KlineEmailAttachment e : emailTransaction.getKlineEmailAttachment()) {
+                MetaFile metaFile = Beans.get(MetaFileRepository.class).find(e.getMetaFileId());
+                KlineEmailAttachmentTransaction mock = new KlineEmailAttachmentTransaction();
+                mock.setMetaFile(metaFile);
+                metaFiles.add(mock);
+            }
+            return metaFiles;
+        }
+        return Collections.emptyList();
     }
 
     private KlineTransaction initTransaction(EmailRequest emailRequest, Long tranId, LocalDateTime now) {
@@ -197,6 +246,7 @@ public class EmailServiceImpl implements EmailService {
 
     private KlineEmailTransaction initKlineEmailTransaction(EmailRequest emailRequest, LocalDateTime now){
         KlineEmailTransaction emailTransaction = new KlineEmailTransaction();
+        emailRequest.setAttachments(initMetaFileId(emailRequest));
         emailTransaction.setEmailFrom(AuthUtils.getUser().getEmail());
         emailTransaction.setDateTime(now);
         emailTransaction.setEmailTo(emailRequest.getTo());
@@ -218,7 +268,6 @@ public class EmailServiceImpl implements EmailService {
         properties.put("mail.user", AppSettings.get().get("email.user"));
         properties.put("mail.password", AppSettings.get().get("email.pwd"));
         properties.put("mail.smtp.ssl.trust", "*");
-        System.out.println(properties);
         return properties;
     }
 

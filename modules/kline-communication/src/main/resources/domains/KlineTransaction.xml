@@ -15,5 +15,9 @@
         <string name="status" />
         <string name="statusDesc"/>
         <string name="owner" />
+        <!--
+                for show in view transaction only..
+        -->
+        <one-to-many name="emailAttachmentTransaction" ref="KlineEmailAttachmentTransaction"/>
     </entity>
 </domain-models>

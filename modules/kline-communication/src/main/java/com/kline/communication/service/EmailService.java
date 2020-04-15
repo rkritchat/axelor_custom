@@ -25,7 +25,7 @@ public interface EmailService {
 
     void initEmailSubject(EmailRequest req, Message msg) throws MessagingException;
 
-    void initEmailAttachment(EmailRequest req, Multipart multipart) throws IOException, MessagingException;
+    void initEmailAttachment(EmailRequest req, Multipart multipart, ActionRequest request) throws IOException, MessagingException;
 
     void removeAttachFileOnSystem(EmailRequest req);
 

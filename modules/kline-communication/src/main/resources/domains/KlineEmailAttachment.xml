@@ -2,9 +2,12 @@
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
   http://axelor.com/xml/ns/domain-models/domain-models_5.0.xsd">
-
+    <!--
+        for create view template only
+    -->
     <module name="communication" package="com.kline.communication.db"/>
     <entity name="KlineEmailAttachment">
         <many-to-one name="metaFile" ref="com.axelor.meta.db.MetaFile" title="File" />
+        <long name="metaFileId"/>
     </entity>
 </domain-models>

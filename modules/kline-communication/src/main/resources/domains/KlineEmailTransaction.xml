@@ -11,7 +11,7 @@
         <string name="emailCc" />
         <string name="emailBcc" />
         <string name="emailSubject" />
-        <string name="emailBody" max="20000"/>
+        <string name="emailBody" max="50000"/>
         <one-to-many name="klineEmailAttachment" ref="KlineEmailAttachment"/>
         <string name="owner" />
         <string name="status" />

@@ -39,6 +39,9 @@
                   <field name="emailBody" showTitle="false" colSpan="12" widget="html" height="300" readonly="true"/>
             </panel>
         </panel>
+        <panel-related name="attachment" field="emailAttachmentTransaction" title="Email Attachment" colSpan="12" editable="true"
+                       grid-view="communication-email-attachment-transaction-grid" sidebar="true" showIf="type==='email'"/>
+
 
         <panel name="smsPanel" showIf="type==='sms'">
             <field name="smsTo" colSpan="12" title="TO" canEdit="false" width="50%"/>

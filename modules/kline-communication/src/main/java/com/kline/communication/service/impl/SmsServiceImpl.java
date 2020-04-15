@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 import com.google.inject.persist.Transactional;
 import com.kline.communication.db.KlineSmsTransaction;
 import com.kline.communication.db.KlineTransaction;
-import com.kline.communication.db.repo.KlineEmailTransactionRepository;
 import com.kline.communication.db.repo.KlineSmsTransactionRepository;
 import com.kline.communication.db.repo.KlineTransactionRepository;
 import com.kline.communication.exception.KLineException;
@@ -41,6 +40,8 @@ public class SmsServiceImpl implements SmsService {
             throw new KLineException(SMS_CONTENT_IS_REQUIRED);
         } else if (org.springframework.util.StringUtils.isEmpty(smsTo)) {
             throw new KLineException(SMS_MOBILE_NO_IS_REQUIRED);
+        } else if (smsTo.length() != 10){
+            throw new KLineException(INVALID_MOBILE_NO);
         }
         String[] mobileNo = {smsTo};
         return new SmsRequest(mobileNo, smsContent);
@@ -55,8 +56,8 @@ public class SmsServiceImpl implements SmsService {
             post.setEntity(entity);
             post.setHeader("content-type", "application/json");
             post.setHeader("requestor", "CRM");
-            post.setHeader("transactionId", "11111");
-            post.setHeader("transactionDateTime", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE));
+            post.setHeader("transactionId", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddhhmmsss")));
+            post.setHeader("transactionDateTime", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
             HttpResponse response = client.execute(post);
             return new Gson().fromJson(EntityUtils.toString(response.getEntity(), "UTF-8"), SmsResponse.class);
         } catch (Exception e) {
@@ -95,7 +96,7 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public void validateResult(SmsResponse smsResponse, TransactionModel transactionModel) throws KLineException {
         //case success
-        if ("0".equals(smsResponse.getResultCode())) {
+        if (SMS_SUCCESS_RESPONSE.equals(smsResponse.getResultCode())) {
             updateTransaction(transactionModel, STATUS_SUCCESS, SEND_SMS_SUCCESSFULLY);
         } else {
             updateTransaction(transactionModel, STATUS_FAILED, smsResponse.getResultDesc());

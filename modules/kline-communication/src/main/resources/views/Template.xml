@@ -13,27 +13,22 @@
     </form>
 
     <grid name="communication-email-template-grid" title="Email Template" model="com.kline.communication.db.KlineEmailTemplate">
-        <field name="body" title="Body"/>
+        <field name="name" title="Category" />
         <field name="subject" title="Subject"/>
         <field name="toCC" title="CC"/>
         <field name="toBCC" title="BCC"/>
     </grid>
 
     <form name="communication-email-template-form" title="Email Template" model="com.kline.communication.db.KlineEmailTemplate">
+        <field name="name" title="Category" />
         <field name="subject" title="Subject :" colSpan="12" width="40%"/>
         <field name="toCC" title="CC :" colSpan="12" width="40%"/>
         <field name="toBCC" title="BCC :" colSpan="12" width="40%"/>
         <field name="body" title="Body :" colSpan="12" height="380" widget="html"/>
     </form>
 
-    <grid name="communication-email-attachment-grid" title="Email Attachment" model="com.kline.communication.db.KlineEmailAttachment">
-        <field name="metaFile" title="Attachment"/>
-        <field name="metaFile" title="Attachment"/>
+
+    <grid name="communication-email-attachment-transaction-grid" title="Email Attachment" model="com.kline.communication.db.KlineEmailAttachmentTransaction">
+        <field name="metaFile" widget="binary-link" title="Attachment"/>
     </grid>
-
-    <form name="communication-email-attachment-form" title="Email Attachment" model="com.kline.communication.db.KlineEmailAttachment">
-        <field name="metaFile" widget="binary-link" title="Attachment" showTitle="false"/>
-    </form>
-
-
 </object-views>
