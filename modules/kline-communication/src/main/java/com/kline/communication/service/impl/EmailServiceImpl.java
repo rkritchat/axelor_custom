@@ -20,6 +20,8 @@ import com.kline.communication.exception.KLineException;
 import com.kline.communication.model.EmailRequest;
 import com.kline.communication.model.TransactionModel;
 import com.kline.communication.service.EmailService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -40,6 +42,8 @@ import static com.kline.communication.constant.CommunicationConstant.ERROR.*;
 import static javax.ws.rs.core.MediaType.TEXT_HTML;
 
 public class EmailServiceImpl implements EmailService {
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public EmailRequest validateRequest(ActionRequest request) throws KLineException {
@@ -71,6 +75,7 @@ public class EmailServiceImpl implements EmailService {
         if (StringUtils.isEmpty(user.getEmail())) {
             throw new KLineException(PLEASE_SET_EMAIL_ADDRESS_IN_YOUR_PROFILE);
         }
+        logger.info("Email From : {}", user.getEmail());
         msg.setFrom(new InternetAddress(user.getEmail()));
     }
 
@@ -83,11 +88,14 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void initEmailTo(EmailRequest request, Message msg) throws MessagingException {
+        logger.info("email to : {}", request.getTo());
         msg.setRecipients(Message.RecipientType.TO, new InternetAddress[]{new InternetAddress(request.getTo())});
         if (!StringUtils.isEmpty(request.getToCC())) {
+            logger.info("email CC : {}", request.getToCC());
             msg.addRecipients(Message.RecipientType.CC, new InternetAddress[]{new InternetAddress(request.getToCC())});
         }
         if (!StringUtils.isEmpty(request.getToBCC())) {
+            logger.info("email BCC : {}", request.getToBCC());
             msg.addRecipients(Message.RecipientType.BCC, new InternetAddress[]{new InternetAddress(request.getToBCC())});
         }
     }
@@ -101,6 +109,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void initEmailSubject(EmailRequest req, Message msg) throws MessagingException {
+        logger.info("email Subject : {}", req.getSubject());
         msg.setSubject(req.getSubject());
         msg.setSentDate(new Date());
     }
@@ -109,10 +118,10 @@ public class EmailServiceImpl implements EmailService {
     public void initEmailAttachment(EmailRequest req, Multipart multipart, ActionRequest request) throws IOException, MessagingException {
         if(!CollectionUtils.isEmpty(req.getAttachments()) && req.isAttachment()){
             req.setContainAttachment(true);
+            logger.info("this request contain attach file...");
             //The framework cannot save meta, then go this way to sending email with attachment
             List<KlineEmailAttachment> reqAttach = (List<KlineEmailAttachment>) request.getContext().get("klineEmailAttachment");
             for (KlineEmailAttachment e : reqAttach) {
-                System.out.println(MetaFiles.getPath(e.getMetaFile()).toString());
                 MimeBodyPart attachPart = new MimeBodyPart();
                 attachPart.attachFile(MetaFiles.getPath(e.getMetaFile()).toString());
                 multipart.addBodyPart(attachPart);
@@ -138,7 +147,7 @@ public class EmailServiceImpl implements EmailService {
             mock.setMetaFileId(metaFile.getId());
             attachments.add(mock);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error("Exception while save attachment transaction", e);
         }
     }
 
@@ -147,21 +156,19 @@ public class EmailServiceImpl implements EmailService {
     public void removeAttachFileOnSystem(EmailRequest req) {
         if (req.isContainAttachment()) {
             for (KlineEmailAttachment e : req.getAttachments()) {
-                System.out.println("File is " + e.getMetaFile().getId());
+                logger.info("File is {}", e.getMetaFile().getId());
                 String file = MetaFiles.getPath(e.getMetaFile()).toString();
                 try {
                     Path path = Paths.get(file);
                     boolean isRemoved = Files.deleteIfExists(path);
-                    System.out.println("Removed file status | " + isRemoved +" | on " + file);
+                    logger.info("Removed file status | {} | on {}", isRemoved, file);
 
                     //remove from db
                     MetaFileRepository metaFileRepository = Beans.get(MetaFileRepository.class);
                     MetaFile metaFile = metaFileRepository.find(e.getMetaFile().getId());
                     metaFileRepository.remove(metaFile);
                 } catch (Exception err) {
-                    //need to store somewhere to remove after sometime
-                    System.out.println(err.getMessage());
-                    System.out.println("Exception occurred while remove file " + file);
+                    logger.error("Exception occurred while remove file ", err);
                 }
             }
         }
@@ -176,9 +183,9 @@ public class EmailServiceImpl implements EmailService {
             KlineTransaction klineTransaction = initTransaction(req, emailTransaction.getId(), now);
             return new TransactionModel(emailTransaction, klineTransaction);
         } catch (Exception e) {
-            System.out.println("Exception occurred while initTransaction" + e.getMessage());
+            logger.error("Exception occurred while initTransaction", e);
+            throw e;
         }
-        return null;
     }
 
     @Override
@@ -195,7 +202,8 @@ public class EmailServiceImpl implements EmailService {
             klineTransaction.setStatusDesc(statusDesc);
             Beans.get(KlineTransactionRepository.class).save(klineTransaction);
         } catch (Exception e) {
-            System.out.println("Exception occurred while updateTransaction" + e.getMessage());
+            logger.error("Exception occurred while updateTransaction", e);
+            throw e;
         }
     }
 
@@ -262,11 +270,11 @@ public class EmailServiceImpl implements EmailService {
 
     private Properties initProperties() {
         Properties properties = new Properties();
-        properties.put("mail.smtp.host", AppSettings.get().get("email.host"));
-        properties.put("mail.smtp.port", AppSettings.get().get("email.port"));
-        properties.put("mail.smtp.auth", AppSettings.get().get("email.auth"));
-        properties.put("mail.user", AppSettings.get().get("email.user"));
-        properties.put("mail.password", AppSettings.get().get("email.pwd"));
+        properties.put("mail.smtp.host", AppSettings.get().get("smtp.host"));
+        properties.put("mail.smtp.port", AppSettings.get().get("smtp.port"));
+        properties.put("mail.smtp.auth", true);
+        properties.put("mail.user", AppSettings.get().get("smtp.user"));
+        properties.put("mail.password", AppSettings.get().get("smtp.pwd"));
         properties.put("mail.smtp.ssl.trust", "*");
         return properties;
     }
@@ -275,7 +283,7 @@ public class EmailServiceImpl implements EmailService {
         return new Authenticator() {
             @Override
             public PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(AppSettings.get().get("email.user"), AppSettings.get().get("email.pwd"));
+                return new PasswordAuthentication(AppSettings.get().get("smtp.user"), AppSettings.get().get("smtp.pwd"));
             }
         };
     }

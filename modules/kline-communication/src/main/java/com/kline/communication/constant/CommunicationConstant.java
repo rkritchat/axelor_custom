@@ -13,7 +13,7 @@ public class CommunicationConstant {
     public static final String STATUS_PENDING = "Pending";
     public static final String STATUS_FAILED = "Fail";
     public static final String STATUS_SUCCESS = "Success";
-    public static final String SMS_SUCCESS_RESPONSE = "0";
+    public static final String SMS_SUCCESS_RESPONSE = "200";
     public static final String EMAIL_PATTERN = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}.[a-z]{2,}$";
 
 

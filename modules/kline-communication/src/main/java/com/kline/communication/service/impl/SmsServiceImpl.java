@@ -23,6 +23,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,10 +34,14 @@ import static com.kline.communication.constant.CommunicationConstant.*;
 
 public class SmsServiceImpl implements SmsService {
 
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
     @Override
     public SmsRequest validateRequest(ActionRequest request) throws KLineException {
         String smsContent = StringUtils.toString(request.getContext().get("smsContent"));
+        logger.info("Sms Content : {} ", smsContent);
         String smsTo = StringUtils.toString(request.getContext().get("smsTo"));
+        logger.info("Sms to : {} ", smsTo);
         if (org.springframework.util.StringUtils.isEmpty(smsContent)) {
             throw new KLineException(SMS_CONTENT_IS_REQUIRED);
         } else if (org.springframework.util.StringUtils.isEmpty(smsTo)) {
@@ -54,14 +60,15 @@ public class SmsServiceImpl implements SmsService {
             HttpPost post = new HttpPost(AppSettings.get().get("sms.url"));
             StringEntity entity = new StringEntity(new Gson().toJson(req));
             post.setEntity(entity);
-            post.setHeader("content-type", "application/json");
+            post.setHeader("Content-Type", "application/json");
             post.setHeader("requestor", "CRM");
-            post.setHeader("transactionId", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddhhmmsss")));
-            post.setHeader("transactionDateTime", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+            post.setHeader("transactionId", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddhhmmss")));
+            post.setHeader("transactionDateTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")));
             HttpResponse response = client.execute(post);
+            System.out.println(response);
             return new Gson().fromJson(EntityUtils.toString(response.getEntity(), "UTF-8"), SmsResponse.class);
         } catch (Exception e) {
-            System.out.println("Exception while send sms " + e.getMessage());
+            logger.error("Exception while send sms : ", e);
             throw new KLineException(EXCEPTION_OCCURRED_WHILE_SENDING_SMS, e);
         }
     }
@@ -89,7 +96,7 @@ public class SmsServiceImpl implements SmsService {
             klineTransaction.setStatusDesc(statusDesc);
             Beans.get(KlineTransactionRepository.class).save(klineTransaction);
         } catch (Exception e) {
-            System.out.println("Exception occurred while updateTransaction" + e.getMessage());
+            logger.error("Exception occurred while updateTransaction :", e);
         }
     }
 

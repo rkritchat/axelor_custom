@@ -12,6 +12,8 @@ import com.kline.communication.exception.KLineException;
 import com.kline.communication.model.EmailRequest;
 import com.kline.communication.model.TransactionModel;
 import com.kline.communication.service.EmailService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import javax.mail.Message;
@@ -30,6 +32,8 @@ public class EmailController {
     @Inject
     private EmailService emailService;
 
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
     public void onLoad(ActionRequest request, ActionResponse response) {
         User user = AuthUtils.getUser();
         if (StringUtils.isEmpty(user.getEmail())) {
@@ -47,7 +51,7 @@ public class EmailController {
             emailService.initEmailFrom(msg);
 
             EmailRequest req = emailService.validateRequest(request);
-            System.out.println(req);
+            logger.info("Sms request from UI : {}", req);
             transactionModel = emailService.initTransaction(req);
             emailService.initEmailTo(req, msg);
             emailService.initEmailSubject(req, msg);
@@ -64,7 +68,7 @@ public class EmailController {
         } catch (KLineException e) {
             response.setError(e.getMessage());
         } catch (Exception e) {
-            System.out.println("exception occurred..." + e.getMessage());
+            logger.error("exception occurred...", e);
             emailService.updateTransaction(transactionModel, STATUS_FAILED, e.getMessage());
             response.setError(EXCEPTION_OCCURRED_WHILE_SENDING_EMAIL.getMessage());
         }
