@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.2.xsd">
+
+    <form name="knowledge-management-create-form" title="Knowledge Management" model="com.kline.knowledge.db.KnowledgeManagement" width="large" canSave="false" canArchive="false" canNew="false" canDelete="false" canEdit="false" onNew="com.kline.knowledge.KnowledgeManagementController:initUpdate">
+        <panel name="mainPanel">
+            <field name="id" hidden="true"/>
+            <field name="knowledgeTitle"/>
+            <field name="knowledgeCategory" title="Category"/>
+            <field name="knowledgeContent" colSpan="12" title="Content" max="50000" widget="html" height="300"/>
+        </panel>
+        <panel sidebar="true">
+            <panel-related name="knowledgeDocument" field="knowledgeDocument" title="" colSpan="12" editable="true"
+                           grid-view="knowledge-document-grid" form-view="knowledge-document-form"/>
+            <button name="knowledgeSaveBtn" title="Save" colSpan="12" onClick="com.kline.knowledge.KnowledgeManagementController:save"/>
+        </panel>
+    </form>
+
+</object-views>

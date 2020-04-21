@@ -1,0 +1,12 @@
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
+  http://axelor.com/xml/ns/domain-models/domain-models_5.0.xsd">
+
+    <!--   km -> knowledge management-->
+    <module name="communication" package="com.kline.config.db.km"/>
+    <entity name="Category">
+        <string name="name" required="true" title="Category"/>
+        <string name="description" required="true" title="Description"/>
+    </entity>
+</domain-models>

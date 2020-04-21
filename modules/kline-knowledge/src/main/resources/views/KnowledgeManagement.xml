@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.2.xsd">
+
+    <grid name="knowledge-management-grid" title="Knowledge Management" model="com.kline.knowledge.db.KnowledgeManagement" canEdit="false" canNew="false" canDelete="false">
+        <field name="id"/>
+        <field name="knowledgeCategory"/>
+        <field name="knowledgeTitle"/>
+        <field name="knowledgeOwner"/>
+        <field name="knowledgePublishDate"/>
+    </grid>
+
+    <form name="knowledge-management-form" title="Knowledge Management" model="com.kline.knowledge.db.KnowledgeManagement" width="large" onLoad="com.kline.knowledge.KnowledgeManagementController:initEditForm" canAttach="false" canSave="false" canEdit="false" canDelete="false" canNew="false">
+        <panel name="mainPanel" colSpan="12">
+            <field name="knowledgeTitle" showTitle="false" colSpan="12"/>
+            <panel title="" colSpan="12">
+                <field name="knowledgeContent" colSpan="12" title="Content" max="50000" widget="html" showTitle="false"/>
+            </panel>
+        </panel>
+        <panel sidebar="true" colSpan="12">
+            <field name="knowledgeCategory" title="Category" colSpan="12"/>
+            <field name="knowledgeOwner" colSpan="12"/>
+            <field name="knowledgePublishDate" colSpan="12"/>
+            <field name="id" hidden="true"/>
+            <panel-related name="knowledgeDocument" field="knowledgeDocument" title="" colSpan="12" editable="false"
+                           grid-view="knowledge-document-grid" form-view="knowledge-document-form" showIf="showDocument==true"/>
+            <button name="knowledgeEditButton" title="Edit" colSpan="12" onClick="com.kline.knowledge.KnowledgeManagementController:edit" showIf="isEditAble==true"/>
+        </panel>
+        <panel-mail name="messagePanel">
+            <mail-messages/>
+        </panel-mail>
+    </form>
+
+</object-views>

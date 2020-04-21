@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  http://axelor.com/xml/ns/object-views/object-views_5.2.xsd">
+
+    <menuitem name="menu-kline-config"
+            title="KLINE" />
+
+    <menuitem name="menu-kline-knowledge-management-config"
+            parent="menu-kline-config"
+            title="Knowledge Management"/>
+
+            <menuitem name="menu-kline-knowledge-management-config-child"
+                      parent="menu-kline-knowledge-management-config"
+                      title="Category"
+                      action="management-knowledge-config"/>
+
+            <action-view name="management-knowledge-config"
+                       title="Category Config"
+                       model="com.kline.config.db.km.Category">
+                <view type="grid" name="knowledge-management-category-config-grid"/>
+                <view type="form" name="knowledge-management-category-config-form"/>
+            </action-view>
+
+
+
+</object-views>

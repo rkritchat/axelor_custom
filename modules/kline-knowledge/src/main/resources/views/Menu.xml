@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  http://axelor.com/xml/ns/object-views/object-views_5.2.xsd">
+
+    <menuitem name="menu-knowledge-management"
+            title="Knowledge Management" />
+
+    <menuitem name="menu-knowledge-management-child"
+            parent="menu-knowledge-management"
+            title="Board"
+            action="management-knowledge-management"/>
+
+    <action-view name="management-knowledge-management"
+               title="Knowledge Management"
+               model="com.kline.knowledge.db.KnowledgeManagement">
+        <view type="grid" name="knowledge-management-grid"/>
+        <view type="form" name="knowledge-management-form"/>
+        <view-param name="popup" value="reload"/>
+        <view-param name="show-confirm" value="false" />
+        <view-param name="popup-save" value="false"/>
+    </action-view>
+
+
+    <menuitem name="menu-knowledge-management-create-child"
+              parent="menu-knowledge-management"
+              title="Create Content"
+              action="management-knowledge-management-create"/>
+
+    <action-view name="management-knowledge-management-create"
+                 title="Knowledge Management"
+                 model="com.kline.knowledge.db.KnowledgeManagement">
+        <view type="form" name="knowledge-management-create-form"/>
+        <view-param name="popup" value="reload"/>
+        <view-param name="show-confirm" value="false" />
+        <view-param name="popup-save" value="false"/>
+    </action-view>
+
+
+</object-views>

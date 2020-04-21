@@ -1,0 +1,18 @@
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
+  http://axelor.com/xml/ns/domain-models/domain-models_5.0.xsd">
+
+    <module name="knowledge" package="com.kline.knowledge.db"/>
+
+    <entity name="KnowledgeManagement">
+        <many-to-one name="knowledgeCategory" ref="com.kline.config.db.km.Category"/>
+        <string name="knowledgeTitle" title="Title"/>
+        <string name="knowledgeContent" title="Content" max="50000"/>
+        <string name="knowledgeOwner" title="Owner"/>
+        <datetime name="knowledgePublishDate" title="Publish Date"/>
+        <boolean name="knowledgeEditable" default="true"/>
+        <one-to-many name="knowledgeDocument" ref="KnowledgeDocument"/>
+    </entity>
+
+</domain-models>

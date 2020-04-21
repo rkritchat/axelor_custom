@@ -15,6 +15,8 @@
             <option value="$PROJECT_DIR$/modules/axelor-message" />
             <option value="$PROJECT_DIR$/modules/axelor-tool" />
             <option value="$PROJECT_DIR$/modules/kline-communication" />
+            <option value="$PROJECT_DIR$/modules/kline-configuration" />
+            <option value="$PROJECT_DIR$/modules/kline-knowledge" />
           </set>
         </option>
         <option name="useAutoImport" value="true" />
