@@ -97,8 +97,8 @@ public class EmailController {
     public void getTemplateDetail(ActionRequest request, ActionResponse response){
         KlineEmailTemplate emailTemplate = (KlineEmailTemplate) request.getContext().get("klineEmailTemplate");
         if (emailTemplate != null) {
-            response.setValue("emailCC", emailTemplate.getToCC());
-            response.setValue("emailBCC", emailTemplate.getToBCC());
+            response.setValue("emailCC", emailTemplate.getEmailCC());
+            response.setValue("emailBCC", emailTemplate.getEmailBCC());
             response.setValue("emailSubject", emailTemplate.getSubject());
             response.setValue("emailContent", emailTemplate.getBody());
         }

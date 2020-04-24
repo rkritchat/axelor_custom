@@ -10,10 +10,11 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
+import javax.mail.internet.AddressException;
 import java.io.IOException;
 
 public interface EmailService {
-    EmailRequest validateRequest(ActionRequest request) throws KLineException;
+    EmailRequest validateRequest(ActionRequest request) throws KLineException, AddressException;
 
     void initEmailFrom(Message msg) throws MessagingException, KLineException;
 

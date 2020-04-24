@@ -15,15 +15,13 @@
     <grid name="communication-email-template-grid" title="Email Template" model="com.kline.communication.db.KlineEmailTemplate">
         <field name="name" title="Category" />
         <field name="subject" title="Subject"/>
-        <field name="toCC" title="CC"/>
-        <field name="toBCC" title="BCC"/>
     </grid>
 
     <form name="communication-email-template-form" title="Email Template" model="com.kline.communication.db.KlineEmailTemplate">
-        <field name="name" title="Category" />
+        <field name="name" title="Category" colSpan="12" width="40%"/>
         <field name="subject" title="Subject :" colSpan="12" width="40%"/>
-        <field name="toCC" title="CC :" colSpan="12" width="40%"/>
-        <field name="toBCC" title="BCC :" colSpan="12" width="40%"/>
+        <field name="emailCC" colSpan="12" widget="TagSelect" x-create="address" form-view="email-address-form" grid-view="email-address-grid" title="CC" width="40%"/>
+        <field name="emailBCC" colSpan="12" widget="TagSelect" x-create="address" form-view="email-address-form" grid-view="email-address-grid" title="BCC" width="40%"/>
         <field name="body" title="Body :" colSpan="12" height="380" widget="html"/>
     </form>
 

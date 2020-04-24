@@ -8,7 +8,9 @@
         <string name="name" required="true"/>
         <string name="body" required="true" max="50000"/>
         <string name="subject" required="true"/>
-        <string name="toCC" />
-        <string name="toBCC" />
+        <string name="toCCId" />
+        <string name="toBCCId" />
+        <many-to-many name="emailCC" ref="com.axelor.apps.message.db.EmailAddress" initParam="true"/>
+        <many-to-many name="emailBCC" ref="com.axelor.apps.message.db.EmailAddress" initParam="true"/>
     </entity>
 </domain-models>

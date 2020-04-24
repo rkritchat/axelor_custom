@@ -13,6 +13,9 @@
         <boolean name="enableAttachment" default="false" title="Attachment"/>
         <boolean name="enableEmailTemplate" default="false" title="Email Template"/>
         <many-to-one name="klineEmailTemplate" ref="KlineEmailTemplate" title="Body" />
+        <many-to-many name="emailTo" ref="com.axelor.apps.message.db.EmailAddress" initParam="true"/>
+        <many-to-many name="emailCC" ref="com.axelor.apps.message.db.EmailAddress" initParam="true"/>
+        <many-to-many name="emailBCC" ref="com.axelor.apps.message.db.EmailAddress" initParam="true"/>
     </entity>
 
 </domain-models>

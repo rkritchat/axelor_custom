@@ -7,12 +7,12 @@
             <field name="id" hidden="true"/>
             <field name="knowledgeTitle"/>
             <field name="knowledgeCategory" title="Category"/>
-            <field name="knowledgeContent" colSpan="12" title="Content" max="50000" widget="html" height="300"/>
+            <field name="knowledgeContent" showTitle="false" colSpan="12" title="Content" max="50000" widget="html" height="300"/>
+            <button name="knowledgeSaveBtn" title="Save" colSpan="3" onClick="com.kline.knowledge.KnowledgeManagementController:save"/>
         </panel>
         <panel sidebar="true">
             <panel-related name="knowledgeDocument" field="knowledgeDocument" title="" colSpan="12" editable="true"
                            grid-view="knowledge-document-grid" form-view="knowledge-document-form"/>
-            <button name="knowledgeSaveBtn" title="Save" colSpan="12" onClick="com.kline.knowledge.KnowledgeManagementController:save"/>
         </panel>
     </form>
 

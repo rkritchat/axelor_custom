@@ -13,15 +13,18 @@ import com.kline.knowledge.model.KnowledgeModel;
 import com.kline.knowledge.service.KnowledgeManagementService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.util.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static com.kline.knowledge.constant.CommonConstant.ERROR.*;
 
 public class KnowledgeManagementServiceImpl implements KnowledgeManagementService {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public void validateRequest(KnowledgeModel knowledgeModel) throws KLineException {
@@ -43,14 +46,15 @@ public class KnowledgeManagementServiceImpl implements KnowledgeManagementServic
         if(knowledgeModel.getId()!=null){
             KnowledgeManagement inDB = repository.find(knowledgeModel.getId());
             if(inDB!=null){
+                logger.info("Start Update");
                 inDB.setKnowledgeTitle(knowledgeModel.getTitle());
                 inDB.setKnowledgeContent(knowledgeModel.getContent());
                 inDB.setKnowledgeCategory(knowledgeModel.getCategory());
-                System.out.println("UPDATE");
                 KnowledgeManagement result = repository.save(inDB);
                 updateKnowledgeDocument(knowledgeModel.getDocuments(), result);
             }
         }else{
+            logger.info("Start Insert");
             KnowledgeManagement knowledgeManagement = new KnowledgeManagement();
             knowledgeManagement.setId(knowledgeModel.getId());
             knowledgeManagement.setKnowledgeCategory(knowledgeModel.getCategory());
@@ -58,18 +62,17 @@ public class KnowledgeManagementServiceImpl implements KnowledgeManagementServic
             knowledgeManagement.setKnowledgeContent(knowledgeModel.getContent());
             knowledgeManagement.setKnowledgeOwner(knowledgeModel.getOwner());
             knowledgeManagement.setKnowledgePublishDate(LocalDateTime.now());
-            System.out.println("INSERT");
             KnowledgeManagement result = repository.save(knowledgeManagement);
             saveKnowledgeDocument(knowledgeModel.getDocuments(), result);
         }
     }
 
     private void updateKnowledgeDocument(List<KnowledgeDocument> documents, KnowledgeManagement knowledgeManagement) {
-        removeOldDocument(documents, knowledgeManagement);
+        removeOldDocument(knowledgeManagement);
         saveKnowledgeDocument(documents, knowledgeManagement);
     }
 
-    private void removeOldDocument(List<KnowledgeDocument> documents, KnowledgeManagement knowledgeManagement){
+    private void removeOldDocument(KnowledgeManagement knowledgeManagement){
         KnowledgeDocumentRepository documentRepository = Beans.get(KnowledgeDocumentRepository.class);
         List<KnowledgeDocument> oldDocument = getDocumentByKnowledgeManagementId(knowledgeManagement.getId());
         for(KnowledgeDocument e : oldDocument){

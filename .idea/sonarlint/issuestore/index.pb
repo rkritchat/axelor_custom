@@ -67,8 +67,6 @@ bmodules/kline-communication/src/main/java/com/kline/communication/service/impl/
 .modules/kline-knowledge/src/license/header.txt,5/f/5fe4286fd86d6954d222337769179abc8ca86607
 T
 $modules/kline-knowledge/build.gradle,6/0/606dad120f7de266c3705b149bdb3be63e9074b8
-@
-modules/test.iml,b/9/b98739928a16ddff92dd59c48d555004b5857f4c
 €
 Pmodules/kline-knowledge/src/main/java/com/kline/knowledge/utils/StringUtils.java,9/6/961a3a8681b966537390c3efd7442a597a15bb16
 ‡
@@ -85,3 +83,9 @@ Smodules/kline-knowledge/src/main/java/com/kline/knowledge/model/KnowledgeModel.
 jmodules/kline-knowledge/src/main/java/com/kline/knowledge/service/impl/KnowledgeManagementServiceImpl.java,8/5/85d69b584ad87c9a76fda58140986f602ed364c5
 Œ
 \modules/kline-knowledge/src/main/java/com/kline/knowledge/KnowledgeManagementController.java,a/b/ab6914b431ee0f58bf20d812e8a6c84835066dc4
+b
+2modules/kline-configuration/src/license/header.txt,1/f/1fc0df27fa7d343ea4a8ab0bc7fd2002e2f64a29
+X
+(modules/kline-configuration/build.gradle,6/d/6d34c360be76d3610408713da6406bb47f288f50
+S
+#modules/axelor-message/build.gradle,c/c/cc08c25281f13b08290bdb839e72ff65563d4e5e

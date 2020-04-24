@@ -4,7 +4,7 @@
 
     <grid name="knowledge-management-grid" title="Knowledge Management" model="com.kline.knowledge.db.KnowledgeManagement" canEdit="false" canNew="false" canDelete="false">
         <field name="id"/>
-        <field name="knowledgeCategory"/>
+        <field name="knowledgeCategory" title="Category"/>
         <field name="knowledgeTitle"/>
         <field name="knowledgeOwner"/>
         <field name="knowledgePublishDate"/>

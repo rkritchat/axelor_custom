@@ -30,12 +30,11 @@ public class KnowledgeManagementController {
 
     public void initEditForm(ActionRequest request, ActionResponse response) {
         String knowledgeOwner = StringUtils.toString(request.getContext().get("knowledgeOwner"));
-        System.out.println("Come " + knowledgeOwner);
         if (AuthUtils.getUser().getName().equals(knowledgeOwner)) {
-            System.out.println("Set editable to True");
+            logger.info("Set editable to true");
             response.setValue("isEditAble", true);
         }else{
-            System.out.println("Set editable to FALSE");
+            logger.info("Set editable to false");
             response.setValue("isEditAble", false);
         }
 
@@ -46,9 +45,6 @@ public class KnowledgeManagementController {
 
     public void save(ActionRequest request, ActionResponse response) {
         try{
-            System.out.println("Start save ");
-            List<KnowledgeDocument> knowledgeDocumentList = (List<KnowledgeDocument>) request.getContext().get("knowledgeDocument");
-            System.out.println(knowledgeDocumentList);
             KnowledgeModel knowledgeModel = new KnowledgeModel(request);
             knowledgeManagement.validateRequest(knowledgeModel);
             knowledgeManagement.save(knowledgeModel);
@@ -81,9 +77,10 @@ public class KnowledgeManagementController {
     }
 
     public void initUpdate(ActionRequest request, ActionResponse response) {
-        System.out.println("ID IS " + request.getContext().get("id"));
         String id = StringUtils.toString(request.getContext().get("id"));
-        if(id!=null){
+        logger.info("id is {}", id);
+        if (id != null) {
+            logger.info("Start fetching data");
             KnowledgeManagement result = knowledgeManagement.getKnowledgeManagementById(Long.parseLong(id));
             List<KnowledgeDocument> documents = knowledgeManagement.getKnowledgeDocument(result.getId());
             response.setValue("id", id);

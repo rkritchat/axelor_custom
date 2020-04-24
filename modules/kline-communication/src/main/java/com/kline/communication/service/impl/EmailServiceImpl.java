@@ -1,6 +1,7 @@
 package com.kline.communication.service.impl;
 
 import com.axelor.app.AppSettings;
+import com.axelor.apps.message.db.EmailAddress;
 import com.axelor.auth.AuthUtils;
 import com.axelor.auth.db.User;
 import com.axelor.inject.Beans;
@@ -26,6 +27,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.mail.*;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import java.io.IOException;
@@ -46,9 +48,9 @@ public class EmailServiceImpl implements EmailService {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
-    public EmailRequest validateRequest(ActionRequest request) throws KLineException {
+    public EmailRequest validateRequest(ActionRequest request) throws KLineException, AddressException {
         EmailRequest req = new EmailRequest(request);
-        if (StringUtils.isEmpty(req.getTo())) {
+        if (req.getTo() == null) {
             throw new KLineException(EMAIL_TO_IS_REQUIRED);
         }
         if (StringUtils.isEmpty(req.getSubject())) {
@@ -57,15 +59,9 @@ public class EmailServiceImpl implements EmailService {
         if(StringUtils.isEmpty(req.getContent())){
             throw new KLineException(EMAIL_CONTENT_IS_REQUIRED);
         }
-        if(!Pattern.matches(EMAIL_PATTERN, req.getTo())){
-            throw new KLineException(INVALID_EMAIL_TO);
-        }
-        if(!StringUtils.isEmpty(req.getToCC()) && !Pattern.matches(EMAIL_PATTERN, req.getToCC())){
-            throw new KLineException(INVALID_EMAIL_CC);
-        }
-        if(!StringUtils.isEmpty(req.getToBCC()) && !Pattern.matches(EMAIL_PATTERN, req.getToBCC())){
-            throw new KLineException(INVALID_EMAIL_BCC);
-        }
+        req.setEmailTo(validateEmailFormat(req.getTo(), INVALID_EMAIL_TO));
+        req.setEmailCc(validateEmailFormat(req.getToCC(), INVALID_EMAIL_CC));
+        req.setEmailBcc(validateEmailFormat(req.getToBCC(), INVALID_EMAIL_BCC));
         return req;
     }
 
@@ -89,14 +85,15 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void initEmailTo(EmailRequest request, Message msg) throws MessagingException {
         logger.info("email to : {}", request.getTo());
-        msg.setRecipients(Message.RecipientType.TO, new InternetAddress[]{new InternetAddress(request.getTo())});
-        if (!StringUtils.isEmpty(request.getToCC())) {
+        //msg.setRecipients(Message.RecipientType.TO, new InternetAddress[]{new InternetAddress(request.getTo())});
+        msg.setRecipients(Message.RecipientType.TO, initInternetAddress(request.getEmailTo()));
+        if (request.getToCC() != null) {
             logger.info("email CC : {}", request.getToCC());
-            msg.addRecipients(Message.RecipientType.CC, new InternetAddress[]{new InternetAddress(request.getToCC())});
+            msg.addRecipients(Message.RecipientType.CC, initInternetAddress(request.getEmailCc()));
         }
-        if (!StringUtils.isEmpty(request.getToBCC())) {
+        if (request.getToBCC() != null) {
             logger.info("email BCC : {}", request.getToBCC());
-            msg.addRecipients(Message.RecipientType.BCC, new InternetAddress[]{new InternetAddress(request.getToBCC())});
+            msg.addRecipients(Message.RecipientType.BCC, initInternetAddress(request.getEmailBcc()));
         }
     }
 
@@ -215,9 +212,9 @@ public class EmailServiceImpl implements EmailService {
         KlineEmailTransaction emailTransaction = emailTransactionRepository.find(Long.parseLong(emailTranId));
 
         response.setValue("emailFrom", defaultIfNull(emailTransaction.getEmailFrom()));
-        response.setValue("emailTo", defaultIfNull(emailTransaction.getEmailTo()));
-        response.setValue("emailCc", defaultIfNull(emailTransaction.getEmailCc()));
-        response.setValue("emailBcc", defaultIfNull(emailTransaction.getEmailBcc()));
+        response.setValue("emailTo", emailTransaction.getEmailTo());
+        response.setValue("emailCc", emailTransaction.getEmailCc());
+        response.setValue("emailBcc", emailTransaction.getEmailBcc());
         response.setValue("emailSubject", defaultIfNull(emailTransaction.getEmailSubject()));
         response.setValue("emailBody", defaultIfNull(emailTransaction.getEmailBody()));
         response.setValue("emailAttachmentTransaction", initMetaFile(emailTransaction));
@@ -242,7 +239,7 @@ public class EmailServiceImpl implements EmailService {
         User user = AuthUtils.getUser();
         KlineTransaction transaction = new KlineTransaction();
         transaction.setType(TYPE_EMAIL);
-        transaction.setEmail(emailRequest.getTo());
+        transaction.setEmail(generateEmailView(emailRequest.getEmailTo()));
         transaction.setStatus(STATUS_PENDING);
         transaction.setTranDate(now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         transaction.setTranTime(now.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
@@ -257,15 +254,27 @@ public class EmailServiceImpl implements EmailService {
         emailRequest.setAttachments(initMetaFileId(emailRequest));
         emailTransaction.setEmailFrom(AuthUtils.getUser().getEmail());
         emailTransaction.setDateTime(now);
-        emailTransaction.setEmailTo(emailRequest.getTo());
-        emailTransaction.setEmailCc(emailRequest.getToCC());
-        emailTransaction.setEmailBcc(emailRequest.getToBCC());
+        emailTransaction.setEmailTo(generateEmailView(emailRequest.getEmailTo()));
+        emailTransaction.setEmailCc(generateEmailView(emailRequest.getEmailCc()));
+        emailTransaction.setEmailBcc(generateEmailView(emailRequest.getEmailBcc()));
         emailTransaction.setEmailSubject(emailRequest.getSubject());
         emailTransaction.setEmailBody(emailRequest.getContent());
         emailTransaction.setKlineEmailAttachment(emailRequest.getAttachments());
         emailTransaction.setStatus(STATUS_PENDING);
         KlineEmailTransactionRepository emailTransactionRepository = Beans.get(KlineEmailTransactionRepository.class);
         return emailTransactionRepository.save(emailTransaction);
+    }
+
+    private String generateEmailView(List<InternetAddress> emailTo){
+        if (CollectionUtils.isEmpty(emailTo)) {
+            return " - ";
+        }
+        StringBuilder result = new StringBuilder();
+        for (InternetAddress internetAddress : emailTo) {
+            result.append(internetAddress.getAddress());
+            result.append(", ");
+        }
+        return result.toString().substring(0, result.toString().length() - 2);
     }
 
     private Properties initProperties() {
@@ -290,5 +299,33 @@ public class EmailServiceImpl implements EmailService {
 
     private String defaultIfNull(String input) {
         return StringUtils.isEmpty(input) ? " - " : input;
+    }
+
+    private List<InternetAddress> validateEmailFormat(Set<EmailAddress> emailAddresses, ERROR error) throws KLineException, AddressException {
+        List<InternetAddress> addresses = new ArrayList<>();
+
+        if (emailAddresses != null) {
+            for (EmailAddress e : emailAddresses) {
+                if (e.getAddress() != null) {
+                    if (!Pattern.matches(EMAIL_PATTERN, e.getAddress())) {
+                        throw new KLineException(error);
+                    } else {
+                        addresses.add(new InternetAddress(e.getAddress()));
+                    }
+                }
+            }
+        }
+        return addresses;
+    }
+
+    private InternetAddress[] initInternetAddress(List<InternetAddress> addresses) {
+        if(!CollectionUtils.isEmpty(addresses)){
+            InternetAddress[] internetAddresses = new InternetAddress[addresses.size()];
+            for (int i = 0; i < addresses.size(); i++) {
+                internetAddresses[i] = addresses.get(i);
+            }
+            return internetAddresses;
+        }
+        return new InternetAddress[]{};
     }
 }
